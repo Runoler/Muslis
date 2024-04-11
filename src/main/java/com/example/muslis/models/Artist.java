@@ -9,12 +9,13 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class Listener {
+@AllArgsConstructor
+public class Artist {
 
+    private String name;
+    private String description;
     private List<Song> songs;
-    private List<Artist> artists;
-    private List<BasePlaylist> basePlaylists;
-    private List<Notification> notifications;
+    private List<BasePlaylist> albums;
+    private int subscribers;
 }

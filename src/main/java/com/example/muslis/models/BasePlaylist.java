@@ -11,10 +11,10 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Listener {
+public class BasePlaylist {
 
+    private String name;
+    private String description;
+    private User author;
     private List<Song> songs;
-    private List<Artist> artists;
-    private List<BasePlaylist> basePlaylists;
-    private List<Notification> notifications;
 }

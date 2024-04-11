@@ -5,16 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Listener {
+public class AlbumPlaylist {
 
-    private List<Song> songs;
-    private List<Artist> artists;
-    private List<BasePlaylist> basePlaylists;
-    private List<Notification> notifications;
+    private enum AlbumType {
+        Single,
+        Album
+    }
+    private BasePlaylist playlist;
+    private AlbumType type;
 }
