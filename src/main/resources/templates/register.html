@@ -1,19 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Registration</title>
+    <title>Register page</title>
 </head>
 <body>
-    <form th:method="POST" th:action="@{/}" th:object="">
+    <form th:method="POST" th:action="@{/register}" th:object="${user}">
         <label for="username">Имя пользователя: </label>
-        <input id="username" type="text" value="" placeholder="Username"/>
+        <input id="username" type="text" th:field="*{username}" placeholder="Username"/>
         <br>
         <label for="password">Пароль: </label>
-        <input id="password" type="password" value="" placeholder="Password"/>
+        <input id="password" type="password" th:field="*{password}" placeholder="Password"/>
         <br>
         <label for="email">Email: </label>
-        <input id="email" type="text" value="" placeholder="example@mail.ru"/>
+        <input id="email" type="text" th:field="*{email}" placeholder="example@mail.ru"/>
+        <br>
+        <label for="role">Role: </label>
+        <select id="role"  th:field="*{role}">
+            <option th:value="${Role[0]}" th:text="Listener">
+            <option th:value="${Role[1]}" th:text="Artist">
+        </select>
         <br>
         <input type="submit" value="Зарегистрироваться"/>
     </form>

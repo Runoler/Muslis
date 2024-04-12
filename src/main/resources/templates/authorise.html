@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Authorise page</title>
+</head>
+<body>
+<form th:method="POST" th:action="@{authorise}" th:object="${user}">
+    <label for="username">Имя пользователя: </label>
+    <input id="username" type="text" th:field="*{username}" placeholder="Username"/>
+    <br>
+    <label for="password">Пароль: </label>
+    <input id="password" type="password" th:field="*{password}" placeholder="Password"/>
+    <br>
+    <input type="submit" value="Войти"/>
+</form>
+</body>
+</html>
