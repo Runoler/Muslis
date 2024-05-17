@@ -1,4 +1,4 @@
-package com.example.muslis.model;
+package com.example.muslis.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

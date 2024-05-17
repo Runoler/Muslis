@@ -1,7 +1,7 @@
-package com.example.muslis.service;
+package com.example.muslis.services;
 
-import com.example.muslis.model.Listener;
-import com.example.muslis.repository.ListenersRepository;
+import com.example.muslis.models.Listener;
+import com.example.muslis.repositories.ListenersRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

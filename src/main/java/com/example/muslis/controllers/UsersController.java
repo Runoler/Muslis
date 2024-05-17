@@ -1,8 +1,11 @@
-package com.example.muslis.controller;
+package com.example.muslis.controllers;
 
-import com.example.muslis.model.BasicUser;
-import com.example.muslis.service.UsersService;
+import com.example.muslis.models.BasicUser;
+import com.example.muslis.security.BasicUserDetails;
+import com.example.muslis.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +33,8 @@ public class UsersController {
             return "/authorise";
         }
         usersService.setActiveUser(usersService.findOne(existingUser.getId()));
-        return "redirect:home";
+        //return "redirect:home";
+        return "/authorise";
     }
 
     @GetMapping("/register")
@@ -60,5 +64,14 @@ public class UsersController {
             return "artist-home";
         }
         return "admin-home";
+    }
+
+    @GetMapping("/showUserInfo")
+    public String showUserInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        BasicUserDetails basicUserDetails = (BasicUserDetails) authentication.getPrincipal();
+        System.out.println(basicUserDetails.getBasicUser());
+
+        return "/authorise";
     }
 }

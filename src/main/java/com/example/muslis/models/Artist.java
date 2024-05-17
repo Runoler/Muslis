@@ -1,4 +1,4 @@
-package com.example.muslis.model;
+package com.example.muslis.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,28 +13,29 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "listener")
-public class Listener {
+@Table(name = "artist")
+public class Artist {
 
     @Id
     private Long id;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id", referencedColumnName = "id", nullable = false)
     private BasicUser user;
+    @Column(name = "description")
+    private String description;
     @OneToMany
-    @JoinTable(name = "listener_songs")
+    @JoinTable(name = "artist_songs")
     private List<Song> songs;
     @OneToMany
-    @JoinTable(name = "listener_artists")
-    private List<Artist> artists;
+    @JoinTable(name = "artist_albums")
+    private List<AlbumPlaylist> albums;
     @OneToMany
-    @JoinTable(name = "listener_playlists")
-    private List<ListenerPlaylist> playlists;
-    @OneToMany
-    @JoinTable(name = "listener_notifications")
+    @JoinTable(name = "artist_notifications")
     private List<Notification> notifications;
+    @Column(name = "subscribers")
+    private int subscribers;
 
-    public Listener(BasicUser user) {
+    public Artist(BasicUser user) {
         this.user = user;
         this.id = user.getId();
     }

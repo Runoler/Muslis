@@ -1,7 +1,7 @@
-package com.example.muslis.service;
+package com.example.muslis.services;
 
-import com.example.muslis.model.Artist;
-import com.example.muslis.repository.ArtistsRepository;
+import com.example.muslis.models.Artist;
+import com.example.muslis.repositories.ArtistsRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
