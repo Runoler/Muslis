@@ -1,6 +1,6 @@
-package com.example.muslis.repositories;
+package com.example.muslis.repository;
 
-import com.example.muslis.models.Admin;
+import com.example.muslis.model.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

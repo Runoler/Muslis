@@ -1,4 +1,4 @@
-package com.example.muslis.models;
+package com.example.muslis.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,15 +10,18 @@ import java.util.Date;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Table(name = "album_request")
 public class AlbumRequest {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     @OneToOne
+    @JoinColumn(name="playlist_id", referencedColumnName = "id", nullable = false)
     private AlbumPlaylist playlist;
+    @Column(name = "date")
     private Date date;
 }

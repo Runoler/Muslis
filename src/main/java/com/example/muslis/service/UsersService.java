@@ -1,9 +1,9 @@
-package com.example.muslis.services;
+package com.example.muslis.service;
 
-import com.example.muslis.models.Artist;
-import com.example.muslis.models.BasicUser;
-import com.example.muslis.models.Listener;
-import com.example.muslis.repositories.BasicUsersRepository;
+import com.example.muslis.model.Artist;
+import com.example.muslis.model.BasicUser;
+import com.example.muslis.model.Listener;
+import com.example.muslis.repository.BasicUsersRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,27 +37,25 @@ public class UsersService {
         return basicUsersRepository.findAll();
     }
 
-    public BasicUser findOne(int id) {
+    public BasicUser findOne(Long id) {
         Optional<BasicUser> foundBasicUser = basicUsersRepository.findById(id);
 
         return foundBasicUser.orElse(null);
     }
 
     public BasicUser findByEmail(String email) {
-        List<BasicUser> allUsers = basicUsersRepository.findAll();
-        Optional<BasicUser> foundUser = allUsers.stream()
-                .filter(user -> email.equals(user.getEmail()))
-                .findFirst();
-
-        return foundUser.orElse(null);
+        Optional<BasicUser> foundedUser = basicUsersRepository.findByEmail(email);
+        return foundedUser.orElse(null);
     }
 
     public void save(BasicUser user) {
 
-        if (user.getRole() == BasicUser.Role.LISTENER) {
+        basicUsersRepository.save(user);
+        basicUsersRepository.flush();
+        if (user.getUserRole() == BasicUser.UserRole.LISTENER) {
             Listener listener = new Listener(user);
             listenersService.save(listener);
-        } else if (user.getRole() == BasicUser.Role.ARTIST) {
+        } else if (user.getUserRole() == BasicUser.UserRole.ARTIST) {
             Artist artist = new Artist(user);
             artistsService.save(artist);
         }

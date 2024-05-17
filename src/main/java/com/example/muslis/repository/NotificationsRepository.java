@@ -1,6 +1,6 @@
-package com.example.muslis.repositories;
+package com.example.muslis.repository;
 
-import com.example.muslis.models.Notification;
+import com.example.muslis.model.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

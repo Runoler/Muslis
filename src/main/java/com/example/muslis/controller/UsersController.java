@@ -1,24 +1,22 @@
-package com.example.muslis.controllers;
+package com.example.muslis.controller;
 
-import com.example.muslis.models.Artist;
-import com.example.muslis.models.BasicUser;
-import com.example.muslis.models.Listener;
-import com.example.muslis.services.ArtistsService;
-import com.example.muslis.services.ListenersService;
-import com.example.muslis.services.UsersService;
+import com.example.muslis.model.BasicUser;
+import com.example.muslis.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Controller
 public class UsersController {
 
     @Autowired
     private UsersService usersService;
+
+    @GetMapping("/")
+    public String basePage() {
+        return "redirect:authorise";
+    }
 
     @GetMapping("/authorise")
     public String authorise(Model model) {
@@ -38,9 +36,7 @@ public class UsersController {
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("user", new BasicUser());
-
-        List<BasicUser.Role> roles = Arrays.asList(BasicUser.Role.LISTENER, BasicUser.Role.ARTIST);
-        model.addAttribute("Role", BasicUser.Role.values());
+        model.addAttribute("Roles", BasicUser.UserRole.values());
         return "register";
     }
 
@@ -58,9 +54,9 @@ public class UsersController {
         if (usersService.getActiveUser() == null) {
             return "redirect:authorise";
         }
-        if (usersService.getActiveUser().getRole().equals(BasicUser.Role.LISTENER)) {
+        if (usersService.getActiveUser().getUserRole().equals(BasicUser.UserRole.LISTENER)) {
             return "listener-home";
-        } else if (usersService.getActiveUser().getRole().equals(BasicUser.Role.ARTIST)) {
+        } else if (usersService.getActiveUser().getUserRole().equals(BasicUser.UserRole.ARTIST)) {
             return "artist-home";
         }
         return "admin-home";

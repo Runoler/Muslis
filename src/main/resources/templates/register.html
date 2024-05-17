@@ -16,12 +16,15 @@
         <input id="email" type="text" th:field="*{email}" placeholder="example@mail.ru"/>
         <br>
         <label for="role">Role: </label>
-        <select id="role"  th:field="*{role}">
-            <option th:value="${Role[0]}" th:text="Listener">
-            <option th:value="${Role[1]}" th:text="Artist">
+        <select id="role"  th:field="*{userRole}">
+            <option th:value="${Roles[0]}" th:text="Listener">
+            <option th:value="${Roles[1]}" th:text="Artist">
         </select>
         <br>
         <input type="submit" value="Зарегистрироваться"/>
+    </form>
+    <form th:method="GET" th:action="@{/authorise}">
+        <input type="submit" value="Авторизоваться">
     </form>
 </body>
 </html>

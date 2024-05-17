@@ -1,15 +1,19 @@
-package com.example.muslis.services;
+package com.example.muslis.service;
 
-import com.example.muslis.models.BasicUser;
-import com.example.muslis.models.Listener;
-import com.example.muslis.repositories.BasicUsersRepository;
-import com.example.muslis.repositories.ListenersRepository;
+import com.example.muslis.model.Listener;
+import com.example.muslis.repository.ListenersRepository;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Getter
+@Setter
+@AllArgsConstructor
 @Service
 public class ListenersService {
 
@@ -27,15 +31,6 @@ public class ListenersService {
 
     public Listener findOne(int id) {
         Optional<Listener> foundListener = listenersRepository.findById(id);
-
-        return foundListener.orElse(null);
-    }
-
-    public Listener findByEmail(String email) {
-        List<Listener> allListeners = listenersRepository.findAll();
-        Optional<Listener> foundListener = allListeners.stream()
-                .filter(user -> email.equals(user.getEmail()))
-                .findFirst();
 
         return foundListener.orElse(null);
     }

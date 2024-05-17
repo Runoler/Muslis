@@ -1,15 +1,19 @@
-package com.example.muslis.services;
+package com.example.muslis.service;
 
-import com.example.muslis.models.Artist;
-import com.example.muslis.models.Listener;
-import com.example.muslis.repositories.ArtistsRepository;
-import com.example.muslis.repositories.ListenersRepository;
+import com.example.muslis.model.Artist;
+import com.example.muslis.repository.ArtistsRepository;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Getter
+@Setter
+@AllArgsConstructor
 @Service
 public class ArtistsService {
 
@@ -27,15 +31,6 @@ public class ArtistsService {
 
     public Artist findOne(int id) {
         Optional<Artist> foundArtist = artistsRepository.findById(id);
-
-        return foundArtist.orElse(null);
-    }
-
-    public Artist findByEmail(String email) {
-        List<Artist> allArtists = artistsRepository.findAll();
-        Optional<Artist> foundArtist = allArtists.stream()
-                .filter(user -> email.equals(user.getEmail()))
-                .findFirst();
 
         return foundArtist.orElse(null);
     }

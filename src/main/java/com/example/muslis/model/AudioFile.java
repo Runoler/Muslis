@@ -1,4 +1,4 @@
-package com.example.muslis.models;
+package com.example.muslis.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,22 +6,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-public class BasePlaylist {
+@Table(name = "audio_file")
+public class AudioFile {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "name")
     private String name;
-    private String description;
-    @ManyToOne
-    private BasicUser author;
-    @OneToMany
-    private List<Song> songs;
+    @Column(name = "path")
+    private String path;
 }
