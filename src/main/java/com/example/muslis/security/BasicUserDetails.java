@@ -3,9 +3,13 @@ package com.example.muslis.security;
 import com.example.muslis.models.BasicUser;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Getter
 public class BasicUserDetails implements UserDetails {
@@ -18,7 +22,9 @@ public class BasicUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Arrays.stream(basicUser.getUserRole().split(", "))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override

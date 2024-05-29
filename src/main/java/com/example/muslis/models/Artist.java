@@ -23,6 +23,8 @@ public class Artist {
     private BasicUser user;
     @Column(name = "description")
     private String description;
+    @Column(name = "subscribers")
+    private int subscribers;
     @OneToMany
     @JoinTable(name = "artist_songs")
     private List<Song> songs;
@@ -32,8 +34,6 @@ public class Artist {
     @OneToMany
     @JoinTable(name = "artist_notifications")
     private List<Notification> notifications;
-    @Column(name = "subscribers")
-    private int subscribers;
 
     public Artist(BasicUser user) {
         this.user = user;

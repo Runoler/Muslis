@@ -1,24 +1,12 @@
 package com.example.muslis.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "basic_user")
 public class BasicUser {
-
-    public enum UserRole {
-        LISTENER,
-        ARTIST,
-        ADMIN
-    }
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -29,8 +17,7 @@ public class BasicUser {
     private String password;
     @Column(name = "email")
     private String email;
-    @Enumerated(EnumType.STRING)
     @Column(name = "user_role", columnDefinition = "VARCHAR(255)")
-    private UserRole userRole;
+    private String userRole;
 
 }

@@ -1,9 +1,9 @@
 package com.example.muslis.repositories;
 
-import com.example.muslis.models.Artist;
+import com.example.muslis.models.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ArtistsRepository extends JpaRepository<Artist, Integer> {
+public interface AdminRepository extends JpaRepository<Admin, Integer> {
 }
