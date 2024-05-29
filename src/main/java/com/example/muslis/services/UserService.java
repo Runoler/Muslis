@@ -52,11 +52,9 @@ public class UserService {
         basicUserRepository.save(user);
         basicUserRepository.flush();
         if (user.getUserRole().equals("ROLE_LISTENER")) {
-            Listener listener = new Listener(user);
-            listenerService.save(listener);
+            listenerService.save(new Listener(user));
         } else if (user.getUserRole().equals("ROLE_ARTIST")) {
-            Artist artist = new Artist(user);
-            artistService.save(artist);
+            artistService.save(new Artist(user));
         }
     }
 
