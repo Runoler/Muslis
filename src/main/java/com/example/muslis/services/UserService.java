@@ -9,17 +9,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @Service
-public class UserInfoService {
+public class UserService {
 
     @Autowired
     private UserInfoRepository userInfoRepository;
@@ -31,7 +31,7 @@ public class UserInfoService {
     private ArtistService artistService;
 
     @Autowired
-    public UserInfoService(UserInfoRepository userInfoRepository) {
+    public UserService(UserInfoRepository userInfoRepository) {
         this.userInfoRepository = userInfoRepository;
     }
 
@@ -45,8 +45,32 @@ public class UserInfoService {
 
     }
 
-    public void save(UserInfo user) {
-        userInfoRepository.save(user);
+    public UserInfo save(UserInfo user) {
+        return userInfoRepository.save(user);
+    }
+
+    public UserInfo create(UserInfo user) {
+        if (userInfoRepository.existsByUsername(user.getUsername())) {
+            throw new RuntimeException("Пользователь с таким именем уже существует");
+        }
+
+        if (userInfoRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("Пользователь с таким email уже существует");
+        }
+
+        return save(user);
+    }
+
+    public UserInfo getByUsername(String username) {
+        return userInfoRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+
+    }
+
+    public UserInfo getCurrentUser() {
+        // Получение имени пользователя из контекста Spring Security
+        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return getByUsername(username);
     }
 
     public void GiveArtistRole(UserInfo userInfo) {
@@ -61,6 +85,12 @@ public class UserInfoService {
         userInfo.setListenerPart(listener);
         userInfo.setUserRole(Role.ROLE_LISTENER);
         save(userInfo);
+    }
+
+    public void getAdmin() {
+        var user = getCurrentUser();
+        user.setUserRole(Role.ROLE_ADMIN);
+        save(user);
     }
 
 }

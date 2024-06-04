@@ -7,6 +7,9 @@ import lombok.*;
 import java.util.List;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "user_info")
 public class UserInfo {

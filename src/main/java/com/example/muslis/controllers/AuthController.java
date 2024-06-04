@@ -1,42 +1,32 @@
 package com.example.muslis.controllers;
 
+import com.example.muslis.entities.JwtAuthenticationResponse;
+import com.example.muslis.entities.SignInRequest;
+import com.example.muslis.entities.SignUpRequest;
 import com.example.muslis.models.UserInfo;
+import com.example.muslis.services.AuthenticationService;
 import com.example.muslis.services.RegistrationService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final RegistrationService registrationService;
+    private final AuthenticationService authenticationService;
 
-    @Autowired
-    public AuthController(RegistrationService registrationService) {
-        this.registrationService = registrationService;
+    @PostMapping("/sign-up")
+    public JwtAuthenticationResponse signUp(@RequestBody @Valid SignUpRequest request) {
+        return authenticationService.signUp(request);
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<String> loginPage(@ModelAttribute("basicUser") UserInfo userInfo) {
-
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/login")
-    public String performLogin(@ModelAttribute("basicUser") UserInfo userInfo) {
-        return "redirect::home";
-    }
-
-    @GetMapping("/registration")
-    public String registrationPage(@ModelAttribute("basicUser") UserInfo userInfo) {
-        return "auth/registration";
-    }
-
-    @PostMapping("/registration")
-    public String performRegistration(@ModelAttribute("basicUser") UserInfo userInfo) {
-        registrationService.register(userInfo);
-
-        return "redirect:auth/login";
+    @PostMapping("/sign-in")
+    public JwtAuthenticationResponse signIn(@RequestBody @Valid SignInRequest request) {
+        return authenticationService.signIn(request);
     }
 }

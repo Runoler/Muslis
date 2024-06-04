@@ -17,22 +17,11 @@ import java.util.stream.Collectors;
 public class ActiveUser implements UserDetails {
 
     private final UserInfo userInfo;
-    private Artist artistPart;
-    private Listener listenerPart;
 
     public ActiveUser(UserInfo userInfo) {
         this.userInfo = userInfo;
-        this.artistPart = userInfo.getArtistPart();
-        this.listenerPart = userInfo.getListenerPart();
     }
 
-    public void MakeArtist() {
-        this.artistPart = userInfo.getArtistPart();
-    }
-
-    public void MakeListener() {
-        this.listenerPart = userInfo.getListenerPart();
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
