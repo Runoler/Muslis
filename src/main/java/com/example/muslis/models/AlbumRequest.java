@@ -20,8 +20,8 @@ public class AlbumRequest {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     @OneToOne
-    @JoinColumn(name="playlist_id", referencedColumnName = "id", nullable = false)
-    private AlbumPlaylist playlist;
+    @JoinColumn(name="album_id", referencedColumnName = "id", nullable = false)
+    private Album album;
     @Column(name = "date")
     private Date date;
 }

@@ -11,8 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "album_playlist")
-public class AlbumPlaylist {
+@Table(name = "album")
+public class Album {
 
     public enum AlbumType {
         Single,
@@ -26,8 +26,11 @@ public class AlbumPlaylist {
     @Enumerated(EnumType.STRING)
     @Column(name = "album_type")
     private AlbumType type;
+    @ManyToOne
+    @JoinColumn(name = "artist_id", referencedColumnName = "id")
+    private Artist artist;
 
-    public AlbumPlaylist(BasePlaylist basePlaylist, AlbumType type) {
+    public Album(BasePlaylist basePlaylist, AlbumType type) {
         this.basePlaylist = basePlaylist;
         this.id = basePlaylist.getId();
         this.type = type;

@@ -5,7 +5,7 @@
     <title>Register page</title>
 </head>
 <body>
-<form th:method="POST" th:action="@{/auth/registration}" th:object="${basicUser}">
+<form th:method="POST" th:action="@{/auth/registration}" th:object="${userInfo}">
     <label for="username">Имя пользователя: </label>
     <input id="username" type="text" th:field="*{username}" placeholder="Username"/>
     <div style="color: red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</div>

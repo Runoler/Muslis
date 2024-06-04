@@ -25,9 +25,9 @@ public class Song {
     @ManyToOne
     @JoinColumn(name = "artist_id", referencedColumnName = "id")
     private Artist artist;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "album_id", referencedColumnName = "id")
-    private BasePlaylist album;
+    private Album album;
     @Column(name = "listens")
     private int listens;
 }

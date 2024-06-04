@@ -20,8 +20,9 @@ public class ListenerPlaylist {
     @OneToOne
     @JoinColumn(name = "base_playlist_id", referencedColumnName = "id", nullable = false)
     private BasePlaylist basePlaylist;
-    @Column(name = "subscribers")
-    private int subscribers;
+    @ManyToOne
+    @JoinColumn(name = "listener_id", referencedColumnName = "id")
+    private Listener listener;
 
     public ListenerPlaylist(BasePlaylist basePlaylist) {
         this.basePlaylist = basePlaylist;

@@ -5,7 +5,7 @@
     <title>Login page</title>
 </head>
 <body>
-<form th:method="POST" th:action="@{/auth/login}" th:object="${basicUser}">
+<form th:method="POST" th:action="@{/auth/login}" th:object="${userInfo}">
     <label for="username">Введите имя пользователя: </label>
     <input id="username" type="text" th:field="*{username}" placeholder="username"/>
     <br>

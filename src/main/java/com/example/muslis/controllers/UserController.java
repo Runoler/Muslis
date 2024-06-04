@@ -27,9 +27,9 @@ public class UserController {
         }
 
         BasicUserDetails basicUserDetails = (BasicUserDetails) authentication.getPrincipal();
-        if (basicUserDetails.getBasicUser().getUserRole().equals("ROLE_ADMIN")) {
+        if (basicUserDetails.getUserInfo().getUserRole().equals("ROLE_ADMIN")) {
             return "user/admin-home";
-        } else if (basicUserDetails.getBasicUser().getUserRole().equals("ROLE_LISTENER")) {
+        } else if (basicUserDetails.getUserInfo().getUserRole().equals("ROLE_LISTENER")) {
             return "user/listener-home";
         } else {
             return "user/artist-home";
@@ -45,7 +45,7 @@ public class UserController {
         }
 
         BasicUserDetails basicUserDetails = (BasicUserDetails) authentication.getPrincipal();
-        System.out.println(basicUserDetails.getBasicUser());
+        System.out.println(basicUserDetails.getUserInfo());
 
         return "redirect:home";
     }

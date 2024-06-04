@@ -18,9 +18,9 @@ public class Admin {
     private Long id;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id", referencedColumnName = "id", nullable = false)
-    private BasicUser user;
-    public Admin(BasicUser user) {
-        this.user = user;
-        this.id = user.getId();
+    private UserInfo userInfo;
+    public Admin(UserInfo userInfo) {
+        this.userInfo = userInfo;
+        this.id = userInfo.getId();
     }
 }

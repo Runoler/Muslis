@@ -1,9 +1,9 @@
 package com.example.muslis.services;
 
 import com.example.muslis.models.Artist;
-import com.example.muslis.models.BasicUser;
+import com.example.muslis.models.UserInfo;
 import com.example.muslis.models.Listener;
-import com.example.muslis.repositories.BasicUserRepository;
+import com.example.muslis.repositories.UserInfoRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +19,7 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private final BasicUserRepository basicUserRepository;
+    private final UserInfoRepository userInfoRepository;
 
     @Autowired
     private ListenerService listenerService;
@@ -28,29 +28,29 @@ public class UserService {
     private ArtistService artistService;
 
     @Autowired
-    public UserService(BasicUserRepository basicUserRepository) {
-        this.basicUserRepository = basicUserRepository;
+    public UserService(UserInfoRepository userInfoRepository) {
+        this.userInfoRepository = userInfoRepository;
     }
 
-    public List<BasicUser> findAll() {
-        return basicUserRepository.findAll();
+    public List<UserInfo> findAll() {
+        return userInfoRepository.findAll();
     }
 
-    public BasicUser findOne(Long id) {
-        Optional<BasicUser> foundBasicUser = basicUserRepository.findById(id);
+    public UserInfo findOne(Long id) {
+        Optional<UserInfo> foundBasicUser = userInfoRepository.findById(id);
 
         return foundBasicUser.orElse(null);
     }
 
-    public BasicUser findByEmail(String email) {
-        Optional<BasicUser> foundedUser = basicUserRepository.findByEmail(email);
+    public UserInfo findByEmail(String email) {
+        Optional<UserInfo> foundedUser = userInfoRepository.findByEmail(email);
         return foundedUser.orElse(null);
     }
 
-    public void save(BasicUser user) {
+    public void save(UserInfo user) {
 
-        basicUserRepository.save(user);
-        basicUserRepository.flush();
+        userInfoRepository.save(user);
+        userInfoRepository.flush();
         if (user.getUserRole().equals("ROLE_LISTENER")) {
             listenerService.save(new Listener(user));
         } else if (user.getUserRole().equals("ROLE_ARTIST")) {

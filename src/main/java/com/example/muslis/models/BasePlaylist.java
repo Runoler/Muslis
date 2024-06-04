@@ -23,9 +23,6 @@ public class BasePlaylist {
     private String name;
     @Column(name = "description")
     private String description;
-    @OneToOne
-    @JoinColumn(name = "author_id", referencedColumnName = "id")
-    private BasicUser author;
     @OneToMany
     @JoinTable(name = "base_playlist_songs")
     private List<Song> songs;

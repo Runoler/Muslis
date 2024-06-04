@@ -22,7 +22,7 @@ public class ArtistService {
         return artistRepository.findAll();
     }
 
-    public Artist findOne(int id) {
+    public Artist findOne(Long id) {
         Optional<Artist> foundArtist = artistRepository.findById(id);
 
         return foundArtist.orElse(null);

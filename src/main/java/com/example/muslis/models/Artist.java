@@ -20,23 +20,18 @@ public class Artist {
     private Long id;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id", referencedColumnName = "id", nullable = false)
-    private BasicUser user;
+    private UserInfo userInfo;
     @Column(name = "description")
     private String description;
     @Column(name = "subscribers")
     private int subscribers;
-    @OneToMany
-    @JoinTable(name = "artist_songs")
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)
     private List<Song> songs;
-    @OneToMany
-    @JoinTable(name = "artist_albums")
-    private List<AlbumPlaylist> albums;
-    @OneToMany
-    @JoinTable(name = "artist_notifications")
-    private List<Notification> notifications;
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)
+    private List<Album> albums;
 
-    public Artist(BasicUser user) {
-        this.user = user;
-        this.id = user.getId();
+    public Artist(UserInfo userInfo) {
+        this.userInfo = userInfo;
+        this.id = userInfo.getId();
     }
 }

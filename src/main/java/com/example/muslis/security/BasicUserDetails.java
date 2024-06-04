@@ -1,12 +1,11 @@
 package com.example.muslis.security;
 
-import com.example.muslis.models.BasicUser;
+import com.example.muslis.models.UserInfo;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -14,27 +13,27 @@ import java.util.stream.Collectors;
 @Getter
 public class BasicUserDetails implements UserDetails {
 
-    private final BasicUser basicUser;
+    private final UserInfo userInfo;
 
-    public BasicUserDetails(BasicUser basicUser) {
-        this.basicUser = basicUser;
+    public BasicUserDetails(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.stream(basicUser.getUserRole().split(", "))
+        return Arrays.stream(userInfo.getUserRole().split(", "))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
 
     @Override
     public String getPassword() {
-        return this.basicUser.getPassword();
+        return this.userInfo.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.basicUser.getUsername();
+        return this.userInfo.getUsername();
     }
 
     @Override

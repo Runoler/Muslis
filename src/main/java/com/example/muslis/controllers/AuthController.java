@@ -1,8 +1,9 @@
 package com.example.muslis.controllers;
 
-import com.example.muslis.models.BasicUser;
+import com.example.muslis.models.UserInfo;
 import com.example.muslis.services.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,23 +18,24 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String loginPage(@ModelAttribute("basicUser") BasicUser basicUser) {
-        return "auth/login";
+    public ResponseEntity<String> loginPage(@ModelAttribute("basicUser") UserInfo userInfo) {
+
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")
-    public String performLogin(@ModelAttribute("basicUser") BasicUser basicUser) {
+    public String performLogin(@ModelAttribute("basicUser") UserInfo userInfo) {
         return "redirect::home";
     }
 
     @GetMapping("/registration")
-    public String registrationPage(@ModelAttribute("basicUser") BasicUser basicUser) {
+    public String registrationPage(@ModelAttribute("basicUser") UserInfo userInfo) {
         return "auth/registration";
     }
 
     @PostMapping("/registration")
-    public String performRegistration(@ModelAttribute("basicUser") BasicUser basicUser) {
-        registrationService.register(basicUser);
+    public String performRegistration(@ModelAttribute("basicUser") UserInfo userInfo) {
+        registrationService.register(userInfo);
 
         return "redirect:auth/login";
     }

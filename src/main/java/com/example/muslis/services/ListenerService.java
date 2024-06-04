@@ -23,7 +23,7 @@ public class ListenerService {
         return listenerRepository.findAll();
     }
 
-    public Listener findOne(int id) {
+    public Listener findOne(Long id) {
         Optional<Listener> foundListener = listenerRepository.findById(id);
 
         return foundListener.orElse(null);
