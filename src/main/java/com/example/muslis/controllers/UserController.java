@@ -1,22 +1,28 @@
 package com.example.muslis.controllers;
 
-import com.example.muslis.security.BasicUserDetails;
-import com.example.muslis.services.UserService;
+import com.example.muslis.models.UserInfo;
+import com.example.muslis.security.ActiveUser;
+import com.example.muslis.services.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserInfoService userInfoService;
 
-    @GetMapping("/")
-    public String basePage() {
-        return "redirect:/auth/login";
+    @GetMapping("/api")
+    public ResponseEntity<String> basePage() {
+        return ResponseEntity.ok("Hello!");
     }
 
     @GetMapping("/home")
@@ -26,13 +32,13 @@ public class UserController {
             return "redirect:auth/login";
         }
 
-        BasicUserDetails basicUserDetails = (BasicUserDetails) authentication.getPrincipal();
-        if (basicUserDetails.getUserInfo().getUserRole().equals("ROLE_ADMIN")) {
-            return "user/admin-home";
-        } else if (basicUserDetails.getUserInfo().getUserRole().equals("ROLE_LISTENER")) {
-            return "user/listener-home";
+        ActiveUser activeUser = (ActiveUser) authentication.getPrincipal();
+        if (activeUser.getUserInfo().getUserRole().equals("ROLE_ADMIN")) {
+            return "activeUser/admin-home";
+        } else if (activeUser.getUserInfo().getUserRole().equals("ROLE_LISTENER")) {
+            return "activeUser/listener-home";
         } else {
-            return "user/artist-home";
+            return "activeUser/artist-home";
         }
     }
 
@@ -44,9 +50,14 @@ public class UserController {
             return "redirect:auth/login";
         }
 
-        BasicUserDetails basicUserDetails = (BasicUserDetails) authentication.getPrincipal();
-        System.out.println(basicUserDetails.getUserInfo());
+        ActiveUser activeUser = (ActiveUser) authentication.getPrincipal();
+        System.out.println(activeUser.getUserInfo());
 
         return "redirect:home";
+    }
+
+    @GetMapping(path = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody List<UserInfo> getAll() throws Exception{
+        return this.userInfoService.findAll();
     }
 }

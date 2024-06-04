@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 public class RegistrationService {
 
     private PasswordEncoder passwordEncoder;
-    private UserService userService;
+    private UserInfoService userInfoService;
 
     public void register(UserInfo userInfo) {
         userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
 
-        userService.save(userInfo);
+        userInfoService.save(userInfo);
 
         System.out.println(userInfo.getUsername() + " is saved.");
     }

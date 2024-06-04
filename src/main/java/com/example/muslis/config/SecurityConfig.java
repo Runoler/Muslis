@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,7 +42,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(new AntPathRequestMatcher("/error"),
                                 new AntPathRequestMatcher("/auth/registration"),
-                                new AntPathRequestMatcher( "/auth/login")).permitAll()
+                                new AntPathRequestMatcher( "/auth/login"),
+                                new AntPathRequestMatcher("/users"),
+                                new AntPathRequestMatcher("/api")).permitAll()
                         .anyRequest().authenticated()) //other URLs are only allowed authenticated users.
                 .formLogin((form) -> form
                         .loginPage("/auth/login")

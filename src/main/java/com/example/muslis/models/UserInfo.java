@@ -1,7 +1,10 @@
 package com.example.muslis.models;
 
+import com.example.muslis.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -17,7 +20,12 @@ public class UserInfo {
     private String password;
     @Column(name = "email")
     private String email;
-    @Column(name = "user_role", columnDefinition = "VARCHAR(255)")
-    private String userRole;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role userRole;
+    @OneToOne(mappedBy = "userInfo", cascade = CascadeType.ALL)
+    private Artist artistPart;
+    @OneToOne(mappedBy = "userInfo", cascade = CascadeType.ALL)
+    private Listener listenerPart;
 
 }
