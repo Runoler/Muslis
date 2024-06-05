@@ -2,44 +2,39 @@ package com.example.muslis.services;
 
 import com.example.muslis.enums.Role;
 import com.example.muslis.models.Artist;
-import com.example.muslis.models.UserInfo;
 import com.example.muslis.models.Listener;
+import com.example.muslis.models.UserInfo;
 import com.example.muslis.repositories.UserInfoRepository;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-@Getter
-@Setter
-@AllArgsConstructor
+import java.util.Optional;
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserInfoRepository userInfoRepository;
 
-    @Autowired
-    private ListenerService listenerService;
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<UserInfo> user =  userInfoRepository.findByUsername(username);
 
-    @Autowired
-    private ArtistService artistService;
+        if (user.isEmpty())
+            throw new UsernameNotFoundException("User not found!");
 
-    @Autowired
-    public UserService(UserInfoRepository userInfoRepository) {
-        this.userInfoRepository = userInfoRepository;
+        return user.get();
     }
 
     public List<UserInfo> findAll() throws Exception{
         List<UserInfo> users =  userInfoRepository.findAll();
 
         if (users.isEmpty())
-            throw new UsernameNotFoundException("ActiveUser not found!");
+            throw new UsernameNotFoundException("Users not found!");
 
         return users;
 

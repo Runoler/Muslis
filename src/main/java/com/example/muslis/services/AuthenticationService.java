@@ -5,7 +5,6 @@ import com.example.muslis.entities.SignInRequest;
 import com.example.muslis.entities.SignUpRequest;
 import com.example.muslis.enums.Role;
 import com.example.muslis.models.UserInfo;
-import com.example.muslis.security.ActiveUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private final BasicUserDetailsService basicUserDetailsService;
     private final UserService userService;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
@@ -33,7 +31,7 @@ public class AuthenticationService {
 
         userService.create(user);
 
-        var jwt = jwtService.generateToken(new ActiveUser(user));
+        var jwt = jwtService.generateToken(user);
         return new JwtAuthenticationResponse(jwt);
     }
 
@@ -43,7 +41,7 @@ public class AuthenticationService {
                 request.getPassword()
         ));
 
-        var user = basicUserDetailsService
+        var user = userService
                 .loadUserByUsername(request.getUsername());
 
         var jwt = jwtService.generateToken(user);

@@ -1,6 +1,6 @@
 package com.example.muslis.services;
 
-import com.example.muslis.security.ActiveUser;
+import com.example.muslis.models.UserInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -27,10 +27,10 @@ public class JwtService {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        if (userDetails instanceof ActiveUser customUserDetails) {
-            claims.put("id", customUserDetails.getUserInfo().getId());
-            claims.put("email", customUserDetails.getUserInfo().getEmail());
-            claims.put("role", customUserDetails.getUserInfo().getUserRole());
+        if (userDetails instanceof UserInfo customUserDetails) {
+            claims.put("id", customUserDetails.getId());
+            claims.put("email", customUserDetails.getEmail());
+            claims.put("role", customUserDetails.getUserRole());
         }
         return generateToken(claims, userDetails);
     }

@@ -1,8 +1,7 @@
 package com.example.muslis.security;
 
-import com.example.muslis.services.BasicUserDetailsService;
-import com.example.muslis.services.JwtService;
 import com.example.muslis.services.UserService;
+import com.example.muslis.services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +26,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public static final String HEADER_NAME = "Authorization";
     private final JwtService jwtService;
     private final UserService userService;
-    private final BasicUserDetailsService basicUserDetailsService;
 
     @Override
     protected void doFilterInternal(
@@ -51,7 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         var username = jwtService.extractUserName(jwt);
 
         if (!StringUtils.isEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = basicUserDetailsService
+            UserDetails userDetails = userService
                     .loadUserByUsername(username);
 
             // Если токен валиден, то аутентифицируем пользователя
