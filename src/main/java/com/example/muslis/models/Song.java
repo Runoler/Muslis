@@ -28,7 +28,7 @@ public class Song {
     @JoinColumn(name = "album_id", referencedColumnName = "id")
     private Album album;
     @Column(name = "listens")
-    private Long listens;
+    private int listens;
 
     @PostPersist
     public void generatePath() {

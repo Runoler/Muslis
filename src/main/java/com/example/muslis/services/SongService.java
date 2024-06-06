@@ -22,12 +22,10 @@ import java.util.Optional;
 public class SongService {
 
     private final SongRepository songRepository;
-    public Song processSongRequest(SongRequest songRequest, Album album) {
+    public Song processSongRequest(SongRequest songRequest, Song song) {
 
-        Song song = new Song();
         song.setName(songRequest.getSongName());
-        song.setAlbum(album);
-        song.setArtist(album.getArtist());
+        song.setListens(0);
         return save(song);
     }
 

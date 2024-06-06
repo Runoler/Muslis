@@ -10,7 +10,7 @@ public class SongDTO {
     private String name;
     private Long artist;
     private Long album;
-    private Long listens;
+    private int listens;
 
     public static SongDTO fromModel(Song song) {
         SongDTO dto = new SongDTO();

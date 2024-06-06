@@ -13,9 +13,9 @@ import java.util.List;
 @Data
 public class ListenerPlaylistDTO {
 
-    protected Long id;
-    protected String name;
-    protected String description;
+    private Long id;
+    private String name;
+    private String description;
     private List<SongDTO> songs;
     private Long listener;
 

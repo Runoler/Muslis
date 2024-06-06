@@ -35,14 +35,15 @@ public class AlbumService {
 
         List<Song> songs = new ArrayList<>();
         for (SongRequest songRequest : albumRequest.getSongs()) {
-            Song song = songService.processSongRequest(songRequest, album);
+            Song song = new Song();
+            song.setArtist(album.getArtist());
+            song.setAlbum(album);
+            songService.processSongRequest(songRequest, song);
             songs.add(song);
         }
         album.setSongs(songs);
 
-        album.setArtist(userService.getCurrentUser().getArtistPart());
         save(album);
-        userService.save(userService.getCurrentUser());
 
         for (int i = 0; i < songs.size(); ++i) {
             songService.saveSongAudioFileToDirectory(songs.get(i), files.get(i));

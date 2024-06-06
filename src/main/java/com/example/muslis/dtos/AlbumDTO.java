@@ -11,9 +11,9 @@ import java.util.List;
 @Data
 public class AlbumDTO {
 
-    protected Long id;
-    protected String name;
-    protected String description;
+    private Long id;
+    private String name;
+    private String description;
     private AlbumType type;
     private List<SongDTO> songs;
     private Long artist;
