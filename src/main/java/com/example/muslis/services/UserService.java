@@ -20,6 +20,10 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserInfoRepository userInfoRepository;
 
+    public UserDetailsService userDetailsService() {
+        return this::getByUsername;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<UserInfo> user =  userInfoRepository.findByUsername(username);

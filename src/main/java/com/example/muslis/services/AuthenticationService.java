@@ -6,8 +6,11 @@ import com.example.muslis.entities.SignUpRequest;
 import com.example.muslis.enums.Role;
 import com.example.muslis.models.UserInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,9 +45,11 @@ public class AuthenticationService {
         ));
 
         var user = userService
+                .userDetailsService()
                 .loadUserByUsername(request.getUsername());
 
         var jwt = jwtService.generateToken(user);
+
         return new JwtAuthenticationResponse(jwt);
     }
 }

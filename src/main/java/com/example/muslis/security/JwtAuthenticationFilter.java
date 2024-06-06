@@ -15,9 +15,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.thymeleaf.util.StringUtils;
 
 import java.io.IOException;
+
+import static org.apache.logging.log4j.util.Strings.isEmpty;
+import static org.apache.logging.log4j.util.Strings.isNotEmpty;
+import static org.thymeleaf.util.StringUtils.startsWith;
 
 @Component
 @RequiredArgsConstructor
@@ -29,17 +32,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            @NonNull
-            HttpServletRequest request,
-            @NonNull
-            HttpServletResponse response,
-            @NonNull
-            FilterChain filterChain
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
         // Получаем токен из заголовка
         var authHeader = request.getHeader(HEADER_NAME);
-        if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, BEARER_PREFIX)) {
+        if (isEmpty(authHeader) || !startsWith(authHeader, BEARER_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -48,8 +48,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         var jwt = authHeader.substring(BEARER_PREFIX.length());
         var username = jwtService.extractUserName(jwt);
 
-        if (!StringUtils.isEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userService
+                    .userDetailsService()
                     .loadUserByUsername(username);
 
             // Если токен валиден, то аутентифицируем пользователя
