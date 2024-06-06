@@ -1,11 +1,13 @@
 package com.example.muslis.services;
 
+import com.example.muslis.dtos.SongDTO;
 import com.example.muslis.entities.AlbumRequest;
 import com.example.muslis.entities.SongRequest;
 import com.example.muslis.models.Album;
 import com.example.muslis.models.Song;
 import com.example.muslis.repositories.SongRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,22 +46,26 @@ public class SongService {
     }
 
     public byte[] loadSongAudioFile(Long id) throws Exception {
-        Song song = this.findSongById(id);
+        Song song = songRepository.findSongById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
         return Files.readAllBytes(Path.of(song.getAudioPath()));
     }
 
-    public Song findSongById(Long id) throws Exception{
+    public SongDTO findSongById(Long id) throws Exception{
         Optional<Song> song = songRepository.findSongById(id);
         if (song.isEmpty()) {
             throw new Exception("Song not found.");
         }
-        return song.get();
+        return SongDTO.fromModel(song.get());
     }
 
-    public List<Song> findAllSongs() throws Exception {
+    public List<SongDTO> findAllSongs() throws Exception {
         List<Song> songs = songRepository.findAll();
         if (songs.isEmpty())
             throw new Exception("Songs not found.");
-        return songs;
+        List<SongDTO> songDtos = new ArrayList<>();
+        for (Song song : songs) {
+            songDtos.add(SongDTO.fromModel(song));
+        }
+        return songDtos;
     }
 }

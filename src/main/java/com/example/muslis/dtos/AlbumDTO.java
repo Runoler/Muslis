@@ -27,10 +27,12 @@ public class AlbumDTO {
         dto.setArtist(album.getArtist().getId());
 
         List<SongDTO> songDtos = new ArrayList<>();
-        for (Song song : album.getSongs()) {
-            songDtos.add(SongDTO.fromModel(song));
+        if (album.getSongs() != null) {
+            for (Song song : album.getSongs()) {
+                songDtos.add(SongDTO.fromModel(song));
+            }
+            dto.setSongs(songDtos);
         }
-        dto.setSongs(songDtos);
 
         return dto;
     }

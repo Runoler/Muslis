@@ -1,10 +1,13 @@
 package com.example.muslis.services;
 
+import com.example.muslis.dtos.AlbumDTO;
+import com.example.muslis.dtos.SongDTO;
 import com.example.muslis.entities.AlbumRequest;
 import com.example.muslis.entities.SongRequest;
 import com.example.muslis.models.Album;
 import com.example.muslis.models.Song;
 import com.example.muslis.repositories.AlbumRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
@@ -13,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +54,33 @@ public class AlbumService {
         }
     }
 
-    public Album save(Album album) {
-        return albumRepository.save(album);
+    public AlbumDTO save(Album album) {
+        return AlbumDTO.fromModel(albumRepository.save(album));
     }
+
+    public AlbumDTO save(AlbumDTO dto) {
+        Album album = new Album();
+        album.setId(dto.getId());
+        album.setName(dto.getName());
+        album.setDescription(dto.getDescription());
+        album.setType(dto.getType());
+
+        album.setArtist(userService.getCurrentUser().getArtistPart());
+
+        List<Song> songs = new ArrayList<>();
+        for (SongDTO songDto : dto.getSongs()) {
+            Song song = new Song();
+            song.setId(songDto.getId());
+            song.setName(songDto.getName());
+            song.setArtist(userService.getCurrentUser().getArtistPart());
+            song.setListens(0);
+            song.setAlbum(album);
+            songs.add(song);
+        }
+        album.setSongs(songs);
+
+        Album savedAlbum = albumRepository.save(album);
+        return AlbumDTO.fromModel(savedAlbum);
+    }
+
 }

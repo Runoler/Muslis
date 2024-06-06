@@ -1,5 +1,6 @@
 package com.example.muslis.controllers;
 
+import com.example.muslis.dtos.SongDTO;
 import com.example.muslis.models.Song;
 import com.example.muslis.services.SongService;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +34,9 @@ public class SongController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Song> getSong(@PathVariable("id") Long id) throws Exception {
+    public ResponseEntity<SongDTO> getSong(@PathVariable("id") Long id) throws Exception {
         try {
-            Song song = songService.findSongById(id);
+            SongDTO song = songService.findSongById(id);
             System.out.println(song.getName());
             return ResponseEntity.ok(song);
         } catch (Exception e) {
@@ -44,9 +45,9 @@ public class SongController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Song>> getAllSongs() throws Exception {
+    public ResponseEntity<List<SongDTO>> getAllSongs() throws Exception {
         try {
-            List<Song> songs = songService.findAllSongs();
+            List<SongDTO> songs = songService.findAllSongs();
             System.out.println(songs.size());
             return ResponseEntity.ok(songs);
         } catch (Exception e) {
