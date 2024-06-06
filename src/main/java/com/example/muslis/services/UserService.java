@@ -6,6 +6,7 @@ import com.example.muslis.models.Listener;
 import com.example.muslis.models.UserInfo;
 import com.example.muslis.repositories.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -90,6 +91,17 @@ public class UserService implements UserDetailsService {
         var user = getCurrentUser();
         user.setUserRole(Role.ROLE_ADMIN);
         save(user);
+    }
+
+    public void getArtist() {
+        var user = getCurrentUser();
+        user.setUserRole(Role.ROLE_ARTIST);
+        save(user);
+    }
+
+    public void logout() {
+        this.save(getCurrentUser());
+        SecurityContextHolder.clearContext();
     }
 
 }

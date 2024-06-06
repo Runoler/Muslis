@@ -6,26 +6,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@PrimaryKeyJoinColumn(name = "id")
 @Table(name = "listener_playlist")
-public class ListenerPlaylist {
+public class ListenerPlaylist extends Playlist{
 
-    @Id
-    private Long id;
-    @OneToOne
-    @JoinColumn(name = "base_playlist_id", referencedColumnName = "id", nullable = false)
-    private BasePlaylist basePlaylist;
+    @OneToMany
+    @JoinTable(name = "listener_playlist_songs")
+    private List<Song> songs;
     @ManyToOne
     @JoinColumn(name = "listener_id", referencedColumnName = "id")
     private Listener listener;
 
-    public ListenerPlaylist(BasePlaylist basePlaylist) {
-        this.basePlaylist = basePlaylist;
-        this.id = basePlaylist.getId();
-    }
 }

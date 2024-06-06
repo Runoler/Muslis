@@ -55,7 +55,10 @@ public class SecurityConfig {
                 // Настройка доступа к эндпоинтам
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/endpoint", "/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/songs/**").permitAll()
+                        .requestMatchers("/user/artist/**").hasRole("ARTIST")
+                        .requestMatchers("/endpoint", "/user/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/user/**").hasAnyRole("LISTENER", "ARTIST")
                         .anyRequest().authenticated()) //other URLs are only allowed authenticated users.
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())

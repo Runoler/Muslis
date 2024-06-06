@@ -2,39 +2,52 @@ package com.example.muslis.controllers;
 
 import com.example.muslis.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/example")
 @RequiredArgsConstructor
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping
-    public String example() {
-         return "Hello page!";
+    @GetMapping("/listener")
+    public ResponseEntity<String> basePage() {
+        return ResponseEntity.ok("A listener page here.");
     }
 
     @GetMapping("/admin")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String exampleAdmin() {
-        return "Hello, admin!";
+    public ResponseEntity<String> exampleAdmin() {
+        return ResponseEntity.ok("An admin page here.");
     }
 
     @GetMapping("/get-admin")
-    public void getAdmin() {
+    public ResponseEntity<String> getAdmin() {
         userService.getAdmin();
+        return ResponseEntity.ok("You are an admin now.");
     }
 
-    @GetMapping("/api")
-    public ResponseEntity<String> basePage() {
-        return ResponseEntity.ok("Hello!");
+    @GetMapping("/artist")
+    public ResponseEntity<String> artistPage() {
+        return ResponseEntity.ok("An artist page here.");
+    }
+
+    @GetMapping("/get-artist")
+    public ResponseEntity<String> getArtist() {
+        userService.getArtist();
+        return ResponseEntity.ok("You are an admin now.");
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout() {
+        userService.logout();
+        return ResponseEntity.ok("You are not authenticated yet.");
     }
 
 }

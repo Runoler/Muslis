@@ -1,38 +1,26 @@
 package com.example.muslis.models;
 
+import com.example.muslis.enums.AlbumType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
+import java.util.List;
+
+@EqualsAndHashCode(callSuper = true)
+@Data
+@Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "album")
-public class Album {
+public class Album extends Playlist{
 
-    public enum AlbumType {
-        Single,
-        Album
-    }
-    @Id
-    private Long id;
-    @OneToOne
-    @JoinColumn(name="playlist_id", referencedColumnName = "id", nullable = false)
-    private BasePlaylist basePlaylist;
     @Enumerated(EnumType.STRING)
     @Column(name = "album_type")
     private AlbumType type;
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
+    private List<Song> songs;
     @ManyToOne
     @JoinColumn(name = "artist_id", referencedColumnName = "id")
     private Artist artist;
-
-    public Album(BasePlaylist basePlaylist, AlbumType type) {
-        this.basePlaylist = basePlaylist;
-        this.id = basePlaylist.getId();
-        this.type = type;
-    }
 }
