@@ -56,6 +56,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/songs/**").permitAll()
+                        .requestMatchers("/user/get-listener").hasRole("USER")
+                        .requestMatchers("user/get-artist").hasRole("LISTENER")
                         .requestMatchers("/user/artist/**").hasRole("ARTIST")
                         .requestMatchers("/endpoint", "/user/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasAnyRole("LISTENER", "ARTIST")
@@ -63,13 +65,6 @@ public class SecurityConfig {
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-//                .formLogin((form) -> form
-//                        .loginPage("/auth/login")
-//                        .loginProcessingUrl("/auth/login")
-//                        .defaultSuccessUrl("/home", true)
-//                        .failureUrl("/auth/login?error")
-//                        .permitAll())
-//                .logout((logout) -> logout.logoutUrl("/logout"))
                 .build();
     }
 

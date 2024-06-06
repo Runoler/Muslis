@@ -1,6 +1,8 @@
 package com.example.muslis.services;
 
+import com.example.muslis.entities.AlbumRequest;
 import com.example.muslis.entities.SongRequest;
+import com.example.muslis.models.Album;
 import com.example.muslis.models.Song;
 import com.example.muslis.repositories.SongRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
@@ -19,15 +22,26 @@ import java.util.Optional;
 public class SongService {
 
     private final SongRepository songRepository;
-    public Song processSongRequest(SongRequest songRequest) {
+    public Song processSongRequest(SongRequest songRequest, Album album) {
 
         Song song = new Song();
         song.setName(songRequest.getSongName());
-        return song;
+        song.setAlbum(album);
+        song.setArtist(album.getArtist());
+        return save(song);
     }
 
-    public void saveSongAudioFileToDirectory(Song song, MultipartFile file) throws IOException {
-        Files.copy(file.getInputStream(), Path.of(song.getAudioPath()), StandardCopyOption.REPLACE_EXISTING);
+    public Song save(Song song) {
+        return songRepository.save(song);
+    }
+
+    public void saveSongAudioFileToDirectory(Song song, MultipartFile file) throws Exception {
+        try {
+            Files.copy(file.getInputStream(), Path.of(song.getAudioPath()), StandardCopyOption.REPLACE_EXISTING);
+        } catch (NoSuchFileException e) {
+            throw new Exception("Метод Files.copy() не может найти указанный файл или путь к файлу не существует\n"
+                    + song.getAudioPath());
+        }
     }
 
     public byte[] loadSongAudioFile(Long id) throws Exception {

@@ -30,9 +30,9 @@ public class Song {
     @Column(name = "listens")
     private int listens;
 
-    @PrePersist
+    @PostPersist
     public void generatePath() {
-        this.audioPath = "audiofiles/" + id + ".mp3";
+        this.audioPath = "src/main/data/audiofiles/" + this.id.toString() + this.name + ".mp3";
     }
 }
 

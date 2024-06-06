@@ -6,7 +6,6 @@ import com.example.muslis.models.Listener;
 import com.example.muslis.models.UserInfo;
 import com.example.muslis.repositories.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -73,15 +72,17 @@ public class UserService implements UserDetailsService {
         return getByUsername(username);
     }
 
-    public void GiveArtistRole(UserInfo userInfo) {
-        Artist artist = new Artist();
+    public void giveArtistRole() {
+        UserInfo userInfo = getCurrentUser();
+        Artist artist = new Artist(userInfo);
         userInfo.setArtistPart(artist);
         userInfo.setUserRole(Role.ROLE_ARTIST);
         save(userInfo);
     }
 
-    public void GiveListenerRole(UserInfo userInfo) {
-        Listener listener = new Listener();
+    public void giveListenerRole() {
+        UserInfo userInfo = getCurrentUser();
+        Listener listener = new Listener(userInfo);
         userInfo.setListenerPart(listener);
         userInfo.setUserRole(Role.ROLE_LISTENER);
         save(userInfo);
@@ -90,12 +91,6 @@ public class UserService implements UserDetailsService {
     public void getAdmin() {
         var user = getCurrentUser();
         user.setUserRole(Role.ROLE_ADMIN);
-        save(user);
-    }
-
-    public void getArtist() {
-        var user = getCurrentUser();
-        user.setUserRole(Role.ROLE_ARTIST);
         save(user);
     }
 

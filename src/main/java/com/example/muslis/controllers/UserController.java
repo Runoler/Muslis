@@ -3,8 +3,6 @@ package com.example.muslis.controllers;
 import com.example.muslis.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +18,11 @@ public class UserController {
     @GetMapping("/listener")
     public ResponseEntity<String> basePage() {
         return ResponseEntity.ok("A listener page here.");
+    }
+    @GetMapping("/get-listener")
+    public ResponseEntity<String> getListener() {
+        userService.giveListenerRole();
+        return ResponseEntity.ok("You are an listener now.");
     }
 
     @GetMapping("/admin")
@@ -40,11 +43,11 @@ public class UserController {
 
     @GetMapping("/get-artist")
     public ResponseEntity<String> getArtist() {
-        userService.getArtist();
-        return ResponseEntity.ok("You are an admin now.");
+        userService.giveArtistRole();
+        return ResponseEntity.ok("You are an artist now.");
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public ResponseEntity<String> logout() {
         userService.logout();
         return ResponseEntity.ok("You are not authenticated yet.");
