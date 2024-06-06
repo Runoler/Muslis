@@ -28,11 +28,11 @@ public class Song {
     @JoinColumn(name = "album_id", referencedColumnName = "id")
     private Album album;
     @Column(name = "listens")
-    private int listens;
+    private Long listens;
 
     @PostPersist
     public void generatePath() {
-        this.audioPath = "src/main/data/audiofiles/" + this.id.toString() + this.name + ".mp3";
+        this.audioPath = "src/main/data/audiofiles/" + this.artist.getId().toString() + "_" + this.name + ".mp3";
     }
 }
 

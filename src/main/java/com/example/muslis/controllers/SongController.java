@@ -36,6 +36,7 @@ public class SongController {
     public ResponseEntity<Song> getSong(@PathVariable("id") Long id) throws Exception {
         try {
             Song song = songService.findSongById(id);
+            System.out.println(song.getName());
             return ResponseEntity.ok(song);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
