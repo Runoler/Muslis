@@ -1,63 +1,102 @@
 package com.example.muslis.services;
 
+import com.example.muslis.enums.Role;
 import com.example.muslis.models.Artist;
-import com.example.muslis.models.BasicUser;
 import com.example.muslis.models.Listener;
-import com.example.muslis.repositories.BasicUserRepository;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import com.example.muslis.models.UserInfo;
+import com.example.muslis.repositories.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
-@Getter
-@Setter
-@AllArgsConstructor
 @Service
-public class UserService {
-
-    private final BasicUserRepository basicUserRepository;
+public class UserService implements UserDetailsService {
 
     @Autowired
-    private ListenerService listenerService;
+    private UserInfoRepository userInfoRepository;
 
-    @Autowired
-    private ArtistService artistService;
-
-    @Autowired
-    public UserService(BasicUserRepository basicUserRepository) {
-        this.basicUserRepository = basicUserRepository;
+    public UserDetailsService userDetailsService() {
+        return this::getByUsername;
     }
 
-    public List<BasicUser> findAll() {
-        return basicUserRepository.findAll();
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<UserInfo> user =  userInfoRepository.findByUsername(username);
+
+        if (user.isEmpty())
+            throw new UsernameNotFoundException("User not found!");
+
+        return user.get();
     }
 
-    public BasicUser findOne(Long id) {
-        Optional<BasicUser> foundBasicUser = basicUserRepository.findById(id);
+    public List<UserInfo> findAll() throws Exception{
+        List<UserInfo> users =  userInfoRepository.findAll();
 
-        return foundBasicUser.orElse(null);
+        if (users.isEmpty())
+            throw new UsernameNotFoundException("Users not found!");
+
+        return users;
+
     }
 
-    public BasicUser findByEmail(String email) {
-        Optional<BasicUser> foundedUser = basicUserRepository.findByEmail(email);
-        return foundedUser.orElse(null);
+    public UserInfo save(UserInfo user) {
+        return userInfoRepository.save(user);
     }
 
-    public void save(BasicUser user) {
-
-        basicUserRepository.save(user);
-        basicUserRepository.flush();
-        if (user.getUserRole().equals("ROLE_LISTENER")) {
-            Listener listener = new Listener(user);
-            listenerService.save(listener);
-        } else if (user.getUserRole().equals("ROLE_ARTIST")) {
-            Artist artist = new Artist(user);
-            artistService.save(artist);
+    public UserInfo create(UserInfo user) {
+        if (userInfoRepository.existsByUsername(user.getUsername())) {
+            throw new RuntimeException("Пользователь с таким именем уже существует");
         }
+
+        if (userInfoRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("Пользователь с таким email уже существует");
+        }
+
+        return save(user);
+    }
+
+    public UserInfo getByUsername(String username) {
+        return userInfoRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+
+    }
+
+    public UserInfo getCurrentUser() {
+        // Получение имени пользователя из контекста Spring Security
+        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return getByUsername(username);
+    }
+
+    public void giveArtistRole() {
+        UserInfo userInfo = getCurrentUser();
+        Artist artist = new Artist(userInfo);
+        userInfo.setArtistPart(artist);
+        userInfo.setUserRole(Role.ROLE_ARTIST);
+        save(userInfo);
+    }
+
+    public void giveListenerRole() {
+        UserInfo userInfo = getCurrentUser();
+        Listener listener = new Listener(userInfo);
+        userInfo.setListenerPart(listener);
+        userInfo.setUserRole(Role.ROLE_LISTENER);
+        save(userInfo);
+    }
+
+    public void getAdmin() {
+        var user = getCurrentUser();
+        user.setUserRole(Role.ROLE_ADMIN);
+        save(user);
+    }
+
+    public void logout() {
+        this.save(getCurrentUser());
+        SecurityContextHolder.clearContext();
     }
 
 }

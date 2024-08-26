@@ -1,54 +1,56 @@
 package com.example.muslis.controllers;
 
-import com.example.muslis.security.BasicUserDetails;
 import com.example.muslis.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @GetMapping("/")
-    public String basePage() {
-        return "redirect:/auth/login";
+    @GetMapping("/listener")
+    public ResponseEntity<String> basePage() {
+        return ResponseEntity.ok("A listener page here.");
+    }
+    @GetMapping("/get-listener")
+    public ResponseEntity<String> getListener() {
+        userService.giveListenerRole();
+        return ResponseEntity.ok("You are an listener now.");
     }
 
-    @GetMapping("/home")
-    public String homePage() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!authentication.isAuthenticated()) {
-            return "redirect:auth/login";
-        }
-
-        BasicUserDetails basicUserDetails = (BasicUserDetails) authentication.getPrincipal();
-        if (basicUserDetails.getBasicUser().getUserRole().equals("ROLE_ADMIN")) {
-            return "user/admin-home";
-        } else if (basicUserDetails.getBasicUser().getUserRole().equals("ROLE_LISTENER")) {
-            return "user/listener-home";
-        } else {
-            return "user/artist-home";
-        }
+    @GetMapping("/admin")
+    public ResponseEntity<String> exampleAdmin() {
+        return ResponseEntity.ok("An admin page here.");
     }
 
-    @GetMapping("/showUserInfo")
-    public String showUserInfo() {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!authentication.isAuthenticated()) {
-            return "redirect:auth/login";
-        }
-
-        BasicUserDetails basicUserDetails = (BasicUserDetails) authentication.getPrincipal();
-        System.out.println(basicUserDetails.getBasicUser());
-
-        return "redirect:home";
+    @GetMapping("/get-admin")
+    public ResponseEntity<String> getAdmin() {
+        userService.getAdmin();
+        return ResponseEntity.ok("You are an admin now.");
     }
+
+    @GetMapping("/artist")
+    public ResponseEntity<String> artistPage() {
+        return ResponseEntity.ok("An artist page here.");
+    }
+
+    @GetMapping("/get-artist")
+    public ResponseEntity<String> getArtist() {
+        userService.giveArtistRole();
+        return ResponseEntity.ok("You are an artist now.");
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout() {
+        userService.logout();
+        return ResponseEntity.ok("You are not authenticated yet.");
+    }
+
 }

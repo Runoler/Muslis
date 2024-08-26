@@ -1,5 +1,6 @@
 package com.example.muslis.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,22 +21,18 @@ public class Listener {
     private Long id;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id", referencedColumnName = "id", nullable = false)
-    private BasicUser user;
+    private UserInfo userInfo;
     @OneToMany
     @JoinTable(name = "listener_songs")
     private List<Song> songs;
     @OneToMany
     @JoinTable(name = "listener_artists")
     private List<Artist> artists;
-    @OneToMany
-    @JoinTable(name = "listener_playlists")
+    @OneToMany(mappedBy = "listener", cascade = CascadeType.ALL)
     private List<ListenerPlaylist> playlists;
-    @OneToMany
-    @JoinTable(name = "listener_notifications")
-    private List<Notification> notifications;
 
-    public Listener(BasicUser user) {
-        this.user = user;
-        this.id = user.getId();
+    public Listener(UserInfo userInfo) {
+        this.userInfo = userInfo;
+        this.id = userInfo.getId();
     }
 }

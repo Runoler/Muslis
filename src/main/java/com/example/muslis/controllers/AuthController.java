@@ -1,44 +1,27 @@
 package com.example.muslis.controllers;
 
-import com.example.muslis.models.BasicUser;
-import com.example.muslis.services.RegistrationService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.example.muslis.entities.JwtAuthenticationResponse;
+import com.example.muslis.entities.SignInRequest;
+import com.example.muslis.entities.SignUpRequest;
+import com.example.muslis.services.AuthenticationService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    private final RegistrationService registrationService;
+    private final AuthenticationService authenticationService;
 
-    @Autowired
-    public AuthController(RegistrationService registrationService) {
-        this.registrationService = registrationService;
+    @PostMapping("/sign-up")
+    public JwtAuthenticationResponse signUp(@RequestBody @Valid SignUpRequest request) {
+        return authenticationService.signUp(request);
     }
 
-    @GetMapping("/login")
-    public String loginPage(@ModelAttribute("basicUser") BasicUser basicUser) {
-        return "auth/login";
-    }
-
-    @PostMapping("/login")
-    public String performLogin(@ModelAttribute("basicUser") BasicUser basicUser) {
-        return "redirect::home";
-    }
-
-    @GetMapping("/registration")
-    public String registrationPage(@ModelAttribute("basicUser") BasicUser basicUser) {
-        return "auth/registration";
-    }
-
-    @PostMapping("/registration")
-    public String performRegistration(@ModelAttribute("basicUser") BasicUser basicUser) {
-        registrationService.register(basicUser);
-
-        return "redirect:auth/login";
+    @PostMapping("/sign-in")
+    public JwtAuthenticationResponse signIn(@RequestBody @Valid SignInRequest request) {
+        return authenticationService.signIn(request);
     }
 }

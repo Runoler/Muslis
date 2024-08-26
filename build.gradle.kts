@@ -3,6 +3,7 @@ plugins {
 	war
 	id("org.springframework.boot") version "3.2.4"
 	id("io.spring.dependency-management") version "1.1.4"
+	id("org.siouan.frontend-jdk11") version "8.0.0"
 }
 
 group = "com.example"
@@ -30,6 +31,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
+	implementation("io.jsonwebtoken:jjwt-api:0.12.3")
+	implementation("io.jsonwebtoken:jjwt-impl:0.12.3")
+	implementation("io.jsonwebtoken:jjwt-jackson:0.12.3")
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	annotationProcessor("org.projectlombok:lombok")

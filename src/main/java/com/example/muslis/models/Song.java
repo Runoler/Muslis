@@ -19,16 +19,20 @@ public class Song {
     private Long id;
     @Column(name = "name")
     private String name;
-    @OneToOne
-    @JoinColumn(name = "audio_file_id", referencedColumnName = "id")
-    private AudioFile audioFile;
+    @Column(name = "audio_path")
+    private String audioPath;
     @ManyToOne
     @JoinColumn(name = "artist_id", referencedColumnName = "id")
     private Artist artist;
     @ManyToOne
     @JoinColumn(name = "album_id", referencedColumnName = "id")
-    private BasePlaylist album;
+    private Album album;
     @Column(name = "listens")
     private int listens;
+
+    @PostPersist
+    public void generatePath() {
+        this.audioPath = "src/main/data/audiofiles/" + this.artist.getId().toString() + "_" + this.name + ".mp3";
+    }
 }
 
