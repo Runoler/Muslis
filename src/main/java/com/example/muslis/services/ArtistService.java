@@ -37,15 +37,19 @@ public class ArtistService {
         return ArtistDTO.fromModel(artist.get());
     }
 
+    public Artist findArtist(Long id) throws Exception {
+        Optional<Artist> artist = artistRepository.findById(id);
+        if (artist.isEmpty())
+            throw new Exception("Artist not found.");
+
+        return artist.get();
+    }
+
     public void save(ArtistDTO dto)
     {
         Artist artist = artistRepository.findById(dto.getId()).get();
 
         artistRepository.save(artist);
-    }
-
-    public void updateListener(Artist artist, ArtistDTO dto) {
-        artist.setDescription(dto.getDescription());
     }
 
 }

@@ -29,6 +29,16 @@ public class AlbumService {
 
     public void processAlbumRequest(AlbumRequest albumRequest, List<MultipartFile> files) throws Exception {
 
+        List<SongDTO> artistSongs = songService.getAllArtistSongs(userService.getCurrentUser().getArtistPart().getId());
+        for (SongRequest songRequest : albumRequest.getSongs()) {
+            if (!artistSongs.isEmpty())
+                for (SongDTO artistSong : artistSongs) {
+                    if (songRequest.getSongName().equals(artistSong.getName())) {
+                        throw new Exception("\"" + songRequest.getSongName() + "\" " + "song already exists.");
+                    }
+                }
+        }
+
         Album album = new Album();
         album.setName(albumRequest.getAlbumName());
         album.setDescription(albumRequest.getAlbumDescription());
@@ -38,6 +48,7 @@ public class AlbumService {
         save(album);
 
         List<Song> songs = new ArrayList<>();
+
         for (SongRequest songRequest : albumRequest.getSongs()) {
             Song song = new Song();
             song.setArtist(album.getArtist());
